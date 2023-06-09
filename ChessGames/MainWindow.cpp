@@ -20,6 +20,14 @@ MainWindow::MainWindow(QWidget *parent)
     //Reversi游戏进入按钮
     reversiEnter = new MPushButton(this, QRect(200, 125, 100, 35), 5);
     reversiEnter->setText("Reversi");
+
+    //GoBang游戏进入按钮
+    goBangEnter = new MPushButton(this, QRect(350, 125, 100, 35), 5);
+    goBangEnter->setText("GoBang");
+
+    //nineGrid游戏进入按钮
+    nineGridEnter = new MPushButton(this, QRect(50, 195, 100, 35), 5);
+    nineGridEnter->setText("NineGrid");
 }
 
 MainWindow::~MainWindow()
@@ -27,4 +35,7 @@ MainWindow::~MainWindow()
     delete welcomeWord;
     delete exit;
     delete nineNineEnter;
+    delete reversiEnter;
+    delete goBangEnter;
+    delete nineGridEnter;
 }

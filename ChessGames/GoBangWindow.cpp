@@ -1,12 +1,15 @@
-#include "ReversiWindow.h"
+#include "GoBangWindow.h"
 
-ReversiWindow::ReversiWindow(QWidget *parent) : ChessGameWindow(parent, 100, 50, 1, 1, 50, 50, 8, 8, 50, 50, 2, 1)
+GoBangWindow::GoBangWindow(QWidget *parent) : ChessGameWindow(parent, 100, 50, 1, 1, 50, 50, 15, 15, 40, 40, 2, 1)
 {
+    ended = 0;
     tempP.rx() = -1; tempP.ry() = -1;
-    game = new ReversiGame;
+    game = new GoBangGame;
+    QObject::connect(newStart, &QPushButton::clicked,[&](){ended = 0;});
+    QObject::connect(newGame, &QPushButton::clicked,[&](){ended = 0;});
 }
 
-ReversiWindow::~ReversiWindow()
+GoBangWindow::~GoBangWindow()
 {
     if (exit != nullptr) delete exit;
     if (newStart != nullptr) delete newStart;
@@ -17,23 +20,22 @@ ReversiWindow::~ReversiWindow()
     if (game != nullptr) delete game;
 }
 
-void ReversiWindow::paintEvent(QPaintEvent* event)
+void GoBangWindow::paintEvent(QPaintEvent* event)
 {
     if (game == nullptr)
         drawer.drawSmallBoard(0, Qt::gray, this);
     else
     {
         drawer.drawSmallBoard(0, Qt::gray, this);
-        for(int i = 0; i < 8; i++)
-            for(int j = 0; j < 8; j++)
-            {
-                if(((ReversiGame*)game)->board[i][j])
-                    drawer.drawItem(((ReversiGame*)game)->agent[((ReversiGame*)game)->board[i][j] - 1]->skin, ((ReversiGame*)game)->agent[((ReversiGame*)game)->board[i][j] - 1]->color, this, QPoint(0, i * 8 + j));
-            }
+        for(int i = 0; i < 15; i++)
+            for(int j = 0; j < 15; j++)
+                if(((GoBangGame*)game)->board[i][j] != 0)
+                    drawer.drawItem(((GoBangGame*)game)->agent[((GoBangGame*)game)->board[i][j] - 1]->skin, ((GoBangGame*)game)->agent[((GoBangGame*)game)->board[i][j] - 1]->color, this, QPoint(0, i * 15 + j));
+
         POINT p;
         p.x = tempP.x(), p.y = tempP.y();
-        if(game->judgeLegal(p))
-            drawer.drawItem(((ReversiGame*)game)->agent[((ReversiGame*)game)->turn]->skin, ((ReversiGame*)game)->agent[((ReversiGame*)game)->turn]->color, this, tempP);
+        if(!ended and game->judgeLegal(p))
+            drawer.drawItem(((GoBangGame*)game)->agent[((GoBangGame*)game)->turn]->skin, ((GoBangGame*)game)->agent[((GoBangGame*)game)->turn]->color, this, tempP);
         QString s1 = "Round " + QString((std::to_string(game->total + 1)).c_str());
         rounds->setText(s1);
         QString s2 = "Scores  " + QString((std::to_string(game->score[0])).c_str()) + " : " + QString((std::to_string(game->score[1])).c_str());
@@ -72,8 +74,9 @@ void ReversiWindow::paintEvent(QPaintEvent* event)
     }
 }
 
-void ReversiWindow::mousePressEvent(QMouseEvent* event)
+void GoBangWindow::mousePressEvent(QMouseEvent* event)
 {
+    if(ended == 1) return;
     if (game->agent[0] != nullptr and game->agent[1] != nullptr)
     {
         QPoint QP = event->pos();
@@ -91,6 +94,7 @@ void ReversiWindow::mousePressEvent(QMouseEvent* event)
                     drawer.drawSmallBoard(0,Qt::darkGray,this);
                     if (x == 1 or x == 2) game->score[x - 1]++;
                     game->total++;
+                    ended = 1;
                 }
                 update();
             }
