@@ -11,6 +11,6 @@ public:
     ~MainWindow();
 
     MLabel* welcomeWord;
-    MPushButton* nineNineEnter, * exit;
+    MPushButton* nineNineEnter, * reversiEnter, * exit;
 
 };

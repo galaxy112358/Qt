@@ -16,6 +16,10 @@ MainWindow::MainWindow(QWidget *parent)
     //NineNine游戏进入按钮
     nineNineEnter = new MPushButton(this, QRect(50, 125, 100, 35), 5);
     nineNineEnter->setText("NineNine");
+
+    //Reversi游戏进入按钮
+    reversiEnter = new MPushButton(this, QRect(200, 125, 100, 35), 5);
+    reversiEnter->setText("Reversi");
 }
 
 MainWindow::~MainWindow()

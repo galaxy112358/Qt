@@ -46,9 +46,9 @@ void NineNineGame::restart(int first)
 	available[startBoard] = 1;
 	startBoard++;
 	startBoard %= 9;
-	agent[0] = new NineNineAgent("Player 1", QPoint(500, 100));
+    agent[0] = new NineNineAgent("NineNinePlayer 1", QPoint(500, 100));
 	QObject::connect(agent[0], &ChessAgent::agentCreated, [=]() {
-		agent[1] = new NineNineAgent("Player 2", QPoint(500, 100));
+        agent[1] = new NineNineAgent("NineNinePlayer 2", QPoint(500, 100));
         QObject::connect(agent[1], &ChessAgent::agentCreated,[=](){
             this->emit agentsCreated();
         });
